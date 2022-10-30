@@ -7,6 +7,8 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "OnlineSubsystem.h"//dks
+#include "Interfaces/OnlineSessionInterface.h"//dks
 
 //////////////////////////////////////////////////////////////////////////
 // AMenuSystemCharacter
@@ -49,6 +51,23 @@ AMenuSystemCharacter::AMenuSystemCharacter()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
+
+	//class stuff here
+
+	IOnlineSubsystem* OnlineSubsystem = IOnlineSubsystem::Get();//pointer to the class //class is undefined so I need to add header
+	if (OnlineSubsystem) 
+	{
+		OnlineSessionInterface = OnlineSubsystem->GetSessionInterface();
+		if (GEngine) 
+		{
+			GEngine->AddOnScreenDebugMessage(
+				-1,
+				15.f,
+				FColor::Blue,
+				FString::Printf(TEXT("Found subsystem %s"), *OnlineSubsystem->GetSubsystemName().ToString())
+			);
+		}
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////
